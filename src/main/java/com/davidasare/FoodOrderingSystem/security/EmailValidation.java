@@ -1,4 +1,4 @@
-package com.davidasare.FoodOrderingSystem.registration;
+package com.davidasare.FoodOrderingSystem.security;
 
 import org.springframework.stereotype.Service;
 
