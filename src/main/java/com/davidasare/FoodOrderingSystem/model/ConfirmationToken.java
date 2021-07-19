@@ -1,6 +1,6 @@
-package com.davidasare.FoodOrderingSystem.registration.token;
+package com.davidasare.FoodOrderingSystem.model;
 
-import com.davidasare.FoodOrderingSystem.user.User;
+import com.davidasare.FoodOrderingSystem.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

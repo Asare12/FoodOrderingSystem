@@ -1,5 +1,7 @@
-package com.davidasare.FoodOrderingSystem.registration.token;
+package com.davidasare.FoodOrderingSystem.services;
 
+import com.davidasare.FoodOrderingSystem.model.ConfirmationToken;
+import com.davidasare.FoodOrderingSystem.repository.ConfirmationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
