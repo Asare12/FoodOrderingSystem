@@ -1,5 +1,6 @@
-package com.davidasare.FoodOrderingSystem.user;
+package com.davidasare.FoodOrderingSystem.repository;
 
+import com.davidasare.FoodOrderingSystem.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
