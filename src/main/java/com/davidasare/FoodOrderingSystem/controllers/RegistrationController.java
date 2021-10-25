@@ -10,18 +10,17 @@ import org.springframework.web.bind.annotation.*;
 
 //@CrossOrigin(origins = "http://localhost:5000")
 @RestController
-@RequestMapping(path = "api/v1/registration")
+@RequestMapping(path = "api/auth")
 @AllArgsConstructor
 public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    //@PostMapping("/signup")
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody RegistrationRequest request){
         return new ResponseEntity(registrationService.register(request), HttpStatus.CREATED);
     }
-    @GetMapping(path = "confirm")
+    @GetMapping(path = "/confirm")
     public ResponseEntity<?> confirm(@RequestParam("token") String token) {
         User user =  registrationService.confirmToken(token);
         return new ResponseEntity(user, HttpStatus.OK);
