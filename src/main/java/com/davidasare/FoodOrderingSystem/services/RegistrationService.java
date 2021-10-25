@@ -72,7 +72,7 @@ public class RegistrationService {
 
         String token = userService.signUpUser(user);
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = "http://localhost:8080/api/auth/confirm?token=" + token;
         emailSender.send(request.getEmail(), emailService.buildEmail(request.getName(), link));
         return token;
     }

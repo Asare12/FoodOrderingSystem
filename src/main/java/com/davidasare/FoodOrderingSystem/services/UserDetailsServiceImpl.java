@@ -83,7 +83,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //        String newToken = UUID.randomUUID().toString();
 //         ConfirmationToken token = createToken(user, newToken);
 //        if(!user.isEnabled() && token.getExpiresAt().isAfter(LocalDateTime.now().plusMinutes(15))){
-//            String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+//            String link = "http://localhost:8080/api/auth/confirm?token=" + token;
 //            emailSender.send(user.getEmail(), emailService.buildEmail(user.getName(), link));
 //        }else{
 //            throw new IllegalStateException("Could not send confirmation");
