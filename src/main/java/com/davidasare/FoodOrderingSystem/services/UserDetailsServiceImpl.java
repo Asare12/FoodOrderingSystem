@@ -28,12 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private EmailService emailService;
     private final EmailSender emailSender;
 
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        return userRepository.findByEmail(email).orElseThrow(() ->
-//                new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
-//    }
-
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -62,7 +56,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
        user.setPassword(encodePassword);
 
        userRepository.save(user);
-
 
        confirmationTokenService.saveConformationToken(createToken(user, token));
 
