@@ -1,5 +1,6 @@
 package com.davidasare.FoodOrderingSystem.security.config;
 
+import com.davidasare.FoodOrderingSystem.model.UserRole;
 import com.davidasare.FoodOrderingSystem.security.jwt.AuthEntryPointJwt;
 import com.davidasare.FoodOrderingSystem.security.jwt.AuthTokenFilter;
 import com.davidasare.FoodOrderingSystem.services.UserDetailsServiceImpl;
@@ -16,6 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.davidasare.FoodOrderingSystem.model.UserRole.ROLE_ADMIN;
 
 @Configuration
 @AllArgsConstructor
@@ -34,8 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
+                .antMatchers("/","index", "/css/*", "/js/*" ).permitAll()
+                .antMatchers("/api/**").permitAll()
+//                .antMatchers("/api/**").hasRole(ROLE_ADMIN.name())
+//                .antMatchers("/api/auth/**").permitAll()
+//                .antMatchers("/api/test/**").permitAll()
                 .anyRequest()
                 .authenticated();
 //                .and()
