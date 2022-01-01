@@ -1,5 +1,7 @@
 package com.davidasare.FoodOrderingSystem.model;
 
+import com.davidasare.FoodOrderingSystem.enums.UserRole;
+
 import javax.persistence.*;
 
 @Entity
