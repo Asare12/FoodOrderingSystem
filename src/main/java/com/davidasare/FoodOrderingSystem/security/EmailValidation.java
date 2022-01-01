@@ -9,7 +9,9 @@ public class EmailValidation implements Predicate<String> {
 
     @Override
     public boolean test(String s) {
-        // TODO: Regex to validate email
-        return true;
+        String ePattern = "^(.+)@(\\S+) $.";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(s);
+        return m.matches();
     }
 }
