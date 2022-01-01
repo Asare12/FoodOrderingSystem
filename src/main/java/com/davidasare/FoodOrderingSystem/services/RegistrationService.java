@@ -2,15 +2,15 @@ package com.davidasare.FoodOrderingSystem.services;
 
 import com.davidasare.FoodOrderingSystem.email.EmailSender;
 import com.davidasare.FoodOrderingSystem.email.EmailService;
+import com.davidasare.FoodOrderingSystem.exception.CustomException;
 import com.davidasare.FoodOrderingSystem.model.Role;
 import com.davidasare.FoodOrderingSystem.model.ConfirmationToken;
 import com.davidasare.FoodOrderingSystem.payload.request.RegistrationRequest;
-import com.davidasare.FoodOrderingSystem.services.ConfirmationTokenService;
 import com.davidasare.FoodOrderingSystem.repository.RoleRepository;
 import com.davidasare.FoodOrderingSystem.model.User;
-import com.davidasare.FoodOrderingSystem.model.UserRole;
+import com.davidasare.FoodOrderingSystem.enums.UserRole;
+import com.davidasare.FoodOrderingSystem.repository.UserRepository;
 import com.davidasare.FoodOrderingSystem.security.EmailValidation;
-import com.davidasare.FoodOrderingSystem.services.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,11 +39,11 @@ public class RegistrationService {
 
     public RegistrationService(){}
 
-    public String register(RegistrationRequest request) {
+    public String register(RegistrationRequest request) throws CustomException {
 
         boolean isValidEmail = emailValidation.test(request.getEmail());
         if(!isValidEmail){
-            throw new IllegalStateException("Email not valid");
+            throw new CustomException("Email not valid");
         }
         User user = new User(request.getName(), request.getEmail(), request.getPassword());
 

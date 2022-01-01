@@ -2,6 +2,8 @@ package com.davidasare.FoodOrderingSystem.services;
 
 import com.davidasare.FoodOrderingSystem.email.EmailSender;
 import com.davidasare.FoodOrderingSystem.email.EmailService;
+import com.davidasare.FoodOrderingSystem.enums.UserRole;
+import com.davidasare.FoodOrderingSystem.exception.CustomException;
 import com.davidasare.FoodOrderingSystem.model.User;
 import com.davidasare.FoodOrderingSystem.model.ConfirmationToken;
 import com.davidasare.FoodOrderingSystem.model.UserDetailsImpl;
@@ -37,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
-    public String signUpUser(User user) {
+    public String signUpUser(User user) throws CustomException {
        boolean userExists =  userRepository.findByEmail(user.getEmail()).isPresent();
 
         String token = UUID.randomUUID().toString();
@@ -46,10 +48,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // TODO check of attributes are the same and
             // TODO if email not confirmed send confirmation email.
 
-            throw new IllegalStateException("Email has been taken");
+            throw new CustomException("Email has been taken");
         }
-
-
 
        String encodePassword = bCryptPasswordEncoder.encode(user.getPassword());
 
