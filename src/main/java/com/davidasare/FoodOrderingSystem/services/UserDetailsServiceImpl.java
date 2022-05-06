@@ -2,7 +2,6 @@ package com.davidasare.FoodOrderingSystem.services;
 
 import com.davidasare.FoodOrderingSystem.email.EmailSender;
 import com.davidasare.FoodOrderingSystem.email.EmailService;
-import com.davidasare.FoodOrderingSystem.enums.UserRole;
 import com.davidasare.FoodOrderingSystem.exception.CustomException;
 import com.davidasare.FoodOrderingSystem.model.User;
 import com.davidasare.FoodOrderingSystem.model.ConfirmationToken;
@@ -45,9 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String token = UUID.randomUUID().toString();
 
         if(userExists) {
-            // TODO check of attributes are the same and
             // TODO if email not confirmed send confirmation email.
-
             throw new CustomException("Email has been taken");
         }
 
@@ -56,7 +53,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
        user.setPassword(encodePassword);
 
        userRepository.save(user);
-
        confirmationTokenService.saveConformationToken(createToken(user, token));
 
        return token;

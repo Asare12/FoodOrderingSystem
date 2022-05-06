@@ -1,7 +1,7 @@
 package com.davidasare.FoodOrderingSystem.repository;
 
 import com.davidasare.FoodOrderingSystem.model.Role;
-import com.davidasare.FoodOrderingSystem.model.UserRole;
+import com.davidasare.FoodOrderingSystem.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
