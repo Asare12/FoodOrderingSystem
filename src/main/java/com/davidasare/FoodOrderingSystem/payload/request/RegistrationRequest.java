@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
 @ToString
 public class RegistrationRequest {
 
