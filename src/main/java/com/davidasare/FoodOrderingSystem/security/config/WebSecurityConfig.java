@@ -1,6 +1,5 @@
 package com.davidasare.FoodOrderingSystem.security.config;
 
-import com.davidasare.FoodOrderingSystem.model.UserRole;
 import com.davidasare.FoodOrderingSystem.security.jwt.AuthEntryPointJwt;
 import com.davidasare.FoodOrderingSystem.security.jwt.AuthTokenFilter;
 import com.davidasare.FoodOrderingSystem.services.UserDetailsServiceImpl;
@@ -17,8 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static com.davidasare.FoodOrderingSystem.model.UserRole.ROLE_ADMIN;
 
 @Configuration
 @AllArgsConstructor
