@@ -10,8 +10,9 @@ spring:
     username: davidasare
   jpa:
     hibernate:
-#      ddl-auto: create-drop
-      ddl-auto: update
+    generate-ddl: true
+#   Hibernate ddl auto (create, create-drop, validate, update)
+    ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

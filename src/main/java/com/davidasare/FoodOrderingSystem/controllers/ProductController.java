@@ -1,106 +1,67 @@
 package com.davidasare.FoodOrderingSystem.controllers;
 
 
-import com.davidasare.FoodOrderingSystem.exception.ResourceNotFoundException;
 import com.davidasare.FoodOrderingSystem.model.Category;
-import com.davidasare.FoodOrderingSystem.model.Product;
-import com.davidasare.FoodOrderingSystem.repository.CategoryRepository;
-import com.davidasare.FoodOrderingSystem.repository.ProductRepository;
+import com.davidasare.FoodOrderingSystem.payload.request.ProductRequest;
+import com.davidasare.FoodOrderingSystem.payload.response.ApiResponse;
+import com.davidasare.FoodOrderingSystem.services.ProductService;
+import com.davidasare.FoodOrderingSystem.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("api/")
 public class ProductController {
-    @Autowired
-    ProductRepository productRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    ProductService productService;
+    @Autowired
+    CategoryService categoryService;
 
-    public ProductController(ProductRepository productRepository){
-        this.productRepository = productRepository;
+    @GetMapping("/products")
+    public List<ProductRequest> getProducts(@RequestParam(required = false) boolean New, @RequestParam(required = false) String category)  {
+
+        return (New) ? productService.listProducts().stream().sorted(Comparator.comparing(ProductRequest::getId)).limit(5).collect(Collectors.toList()) : productService.listProducts();
     }
-
-//    @GetMapping("/category")
-//    public List<Product> getProducts(){
-//        return productRepository.findAll();
+//    @GetMapping("/Search")
+//    public Category getCategoryByName(@RequestParam String category){
+//        return categoryService.readCategory(category);
 //    }
 
-    @GetMapping("/{categoryId}/products")
-    public Page<Product> getAllProductsByCategoryId(@PathVariable (value = "categoryId") Long categoryId,
-                                                   Pageable pageable){
-        return productRepository.findByCategoryId(categoryId, pageable);
-    }
-
-//    @PostMapping
-//    public ResponseEntity createProduct(@RequestBody Product product) throws URISyntaxException {
-//        Product savedProduct = productRepository.save(product);
-//        return ResponseEntity.created(new URI("/product/" + savedProduct.getId())).body(savedProduct);
-//    }
-    @PostMapping("/{categoryId}/products")
-    public Product createProduct(@PathVariable (value = "categoryId") Long categoryId,
-                                 @Valid @RequestBody Product product) {
-        return categoryRepository.findById(categoryId).map(category -> {
-            product.setCategory(category);
-            return productRepository.save(product);
-        }).orElseThrow(() -> new ResourceNotFoundException("categoryId " + categoryId + " not found"));
-    }
-
-//    @PostMapping("/category/{categoryId}/products")
-//    public ResponseEntity createProduct(@PathVariable (value = "categoryId") Long postId,
-//                                 @Valid @RequestBody Product product) {
-//        return categoryRepository.findById(postId).map(category -> {
-//            product.setCategory(category);
-//            Product savedProduct = productRepository.save(product);}).orElseThrow(() -> new ResourceNotFoundException("PostId " + postId + " not found"));
-//            return ResponseEntity.created(new URI("/products/" + savedProduct.getId())).body(savedProduct);
-//       // }).orElseThrow(() -> new ResourceNotFoundException("PostId " + postId + " not found"));
-//    }
-
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity updateProduct(@PathVariable Long id, @RequestBody Product product) {
-//        Product currentProduct = productRepository.findById(id).orElseThrow(RuntimeException::new);
-//        currentProduct.setProductName(product.getProductName());
-//        productRepository.save(currentProduct);
-//        return ResponseEntity.ok(currentProduct);
-//    }
-
-    @PutMapping("/{categoryId}/updateProduct/{productId}")
-    public Product updateProduct(@PathVariable (value = "categoryId") Long categoryId,
-                                 @PathVariable (value = "productId") Long productId,
-                                 @Valid @RequestBody Product productRequest) {
-        if(!categoryRepository.existsById(categoryId)) {
-            throw new ResourceNotFoundException("categoryId " + categoryId + " not found");
+    @PostMapping("/product")
+    public ResponseEntity<ApiResponse> addProduct(@RequestBody ProductRequest productRequest) {
+        Optional<Category> optionalCategory = categoryService.readCategory(productRequest.getCategoryId());
+        if (optionalCategory.isEmpty()) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "category is invalid"), HttpStatus.CONFLICT);
         }
-
-        return productRepository.findById(productId).map(product -> {
-            product.setProductName(productRequest.getProductName());
-            product.setDescription(productRequest.getDescription());
-            product.setPrice(productRequest.getPrice());
-            return productRepository.save(product);
-        }).orElseThrow(() -> new ResourceNotFoundException("ProductId " + productId + "not found"));
+        Category category = optionalCategory.get();
+        productService.addProduct(productRequest, category);
+        return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Product has been added"), HttpStatus.CREATED);
     }
 
-//    @DeleteMapping("delete/{id}")
-//    public ResponseEntity deleteProduct(@PathVariable Long id){
-//        productRepository.deleteById(id);
-//        return ResponseEntity.ok().build();
-//    }
-    @DeleteMapping("/{categoryId}/deleteProduct/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable (value = "categoryId") Long categoryId,
-                                           @PathVariable (value = "productId") Long productId) {
-        return productRepository.findByIdAndCategoryId(productId, categoryId).map(product -> {
-            productRepository.delete(product);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + productId + " and categoryId " + categoryId));
+    @PutMapping("/product/update/{productID}")
+    public ResponseEntity<ApiResponse> updateProduct(@PathVariable("productID") Long productID, @RequestBody @Valid ProductRequest productRequest) {
+        Optional<Category> optionalCategory = categoryService.readCategory(productRequest.getCategoryId());
+        if (optionalCategory.isEmpty()) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "category is invalid"), HttpStatus.CONFLICT);
+        }
+        Category category = optionalCategory.get();
+        productService.updateProduct(productID, productRequest, category);
+        return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Product has been updated"), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/product/delete/{id}")
+    public ResponseEntity deleteCategory(@PathVariable Long id){
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok().build();
     }
 
 }

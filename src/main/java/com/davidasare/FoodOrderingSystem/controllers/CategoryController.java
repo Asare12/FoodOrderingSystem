@@ -1,51 +1,62 @@
 package com.davidasare.FoodOrderingSystem.controllers;
 
 import com.davidasare.FoodOrderingSystem.model.Category;
-import com.davidasare.FoodOrderingSystem.repository.CategoryRepository;
+import com.davidasare.FoodOrderingSystem.payload.response.ApiResponse;
+import com.davidasare.FoodOrderingSystem.services.CategoryService;
+import com.davidasare.FoodOrderingSystem.utils.Helper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("api/")
 public class CategoryController {
 
-    CategoryRepository categoryRepository;
+    @Autowired
+    CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getCategories() {
+        List<Category> body = categoryService.listCategories();
+        return new ResponseEntity<List<Category>>(body, HttpStatus.OK);
     }
 
-    @GetMapping
-    public List<Category> getCategories(){
-        return categoryRepository.findAll();
+    @GetMapping("/category/{id}")
+    public ResponseEntity getCategory(@PathVariable Long id){
+        Optional<Category> category = categoryService.readCategory(id);
+        return ResponseEntity.ok(category);
     }
 
-    @GetMapping("/{id}")
-    public Category getCategory(@PathVariable Long id){
-        return categoryRepository.findById(id).orElseThrow(RuntimeException::new);
+    @PostMapping("/category")
+    public ResponseEntity<ApiResponse> createCategory(@RequestBody Category category) {
+
+        if (Helper.notNull(categoryService.readCategory(category.getName()))) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "category already exists"), HttpStatus.CONFLICT);
+        }
+        categoryService.createCategory(category);
+        return new ResponseEntity<ApiResponse>(new ApiResponse(true, "created the category"), HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public ResponseEntity createCategory(@RequestBody Category category) throws URISyntaxException {
-        Category savedCategory = categoryRepository.save(category);
-        return ResponseEntity.created(new URI("/category/" + savedCategory.getId())).body(savedCategory);
+    @PutMapping("/category/update/{categoryID}")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable("categoryID") Long categoryID, @RequestBody Category category) {
+        // Check to see if the category exists.
+        if (Helper.notNull(categoryService.readCategory(categoryID))) {
+            // If the category exists then update it.
+            categoryService.updateCategory(categoryID, category);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "updated the category"), HttpStatus.OK);
+        }
+
+        // If the category doesn't exist then return a response of unsuccessful.
+        return new ResponseEntity<ApiResponse>(new ApiResponse(false, "category does not exist"), HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity updateCategory(@PathVariable Long id, @RequestBody Category category) {
-         Category currentCategory = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
-         currentCategory.setName(category.getName());
-         categoryRepository.save(currentCategory);
-         return ResponseEntity.ok(currentCategory);
-    }
-
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/category/delete/{id}")
     public ResponseEntity deleteCategory(@PathVariable Long id){
-        categoryRepository.deleteById(id);
+        categoryService.deleteCategory(id);
         return ResponseEntity.ok().build();
     }
 }
