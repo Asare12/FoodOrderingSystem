@@ -11,7 +11,7 @@ public class ProductRequest {
     private Long id;
     private @NotNull String name;
     private @NotNull String imageUrl;
-    private @NotNull String price;
+    private @NotNull Double price;
     private @NotNull String description;
     private @NotNull Long categoryId;
 
@@ -23,7 +23,7 @@ public class ProductRequest {
         this.setPrice(product.getPrice());
         this.setCategoryId(product.getCategory().getId());
     }
-    public ProductRequest(@NotNull String name, @NotNull String imageUrl, @NotNull String price, @NotNull String description, @NotNull Long categoryId) {
+    public ProductRequest(@NotNull String name, @NotNull String imageUrl, @NotNull Double price, @NotNull String description, @NotNull Long categoryId) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.price = price;

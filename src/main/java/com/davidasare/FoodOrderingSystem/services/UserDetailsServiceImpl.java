@@ -8,6 +8,8 @@ import com.davidasare.FoodOrderingSystem.model.ConfirmationToken;
 import com.davidasare.FoodOrderingSystem.model.UserDetailsImpl;
 import com.davidasare.FoodOrderingSystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -66,6 +68,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 LocalDateTime.now().plusMinutes(15),
                 user
         );
+    }
+    public boolean isLoggedIn() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return null != authentication && !("anonymousUser").equals(authentication.getName());
     }
 
 //    public void resendConfirmationEmail(User user){

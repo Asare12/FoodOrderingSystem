@@ -2,9 +2,8 @@ package com.davidasare.FoodOrderingSystem.controllers;
 
 
 import com.davidasare.FoodOrderingSystem.model.User;
-import com.davidasare.FoodOrderingSystem.payload.request.UpdateUserRequest;
+import com.davidasare.FoodOrderingSystem.payload.request.user.UpdateUserRequest;
 import com.davidasare.FoodOrderingSystem.payload.response.ApiResponse;
-import com.davidasare.FoodOrderingSystem.security.jwt.JwtUtils;
 import com.davidasare.FoodOrderingSystem.services.ConfirmationTokenService;
 import com.davidasare.FoodOrderingSystem.services.UserService;
 import com.davidasare.FoodOrderingSystem.utils.Helper;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,10 +30,6 @@ public class UserController {
     UserService userService;
     @Autowired
     ConfirmationTokenService confirmationTokenService;
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/users")
     public List<User> getUsers(@RequestParam boolean req) {

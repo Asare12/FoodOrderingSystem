@@ -19,16 +19,16 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String price;
+    private Double price;
     private String description;
     private String imageUrl;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn
-//    private Category category;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private List<Cart> carts;
 
     public Product(ProductRequest productRequest , Category category) {
         this.name = productRequest.getName();

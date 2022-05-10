@@ -41,12 +41,12 @@ public class CategoryController {
         return new ResponseEntity<ApiResponse>(new ApiResponse(true, "created the category"), HttpStatus.CREATED);
     }
 
-    @PutMapping("/category/update/{categoryID}")
-    public ResponseEntity<ApiResponse> updateCategory(@PathVariable("categoryID") Long categoryID, @RequestBody Category category) {
+    @PutMapping("/category/update/{categoryId}")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable("categoryId") Long categoryId, @RequestBody Category category) {
         // Check to see if the category exists.
-        if (Helper.notNull(categoryService.readCategory(categoryID))) {
+        if (Helper.notNull(categoryService.readCategory(categoryId))) {
             // If the category exists then update it.
-            categoryService.updateCategory(categoryID, category);
+            categoryService.updateCategory(categoryId, category);
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "updated the category"), HttpStatus.OK);
         }
 
@@ -54,7 +54,7 @@ public class CategoryController {
         return new ResponseEntity<ApiResponse>(new ApiResponse(false, "category does not exist"), HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/category/delete/{id}")
+    @DeleteMapping("/category/delete/{Id}")
     public ResponseEntity deleteCategory(@PathVariable Long id){
         categoryService.deleteCategory(id);
         return ResponseEntity.ok().build();

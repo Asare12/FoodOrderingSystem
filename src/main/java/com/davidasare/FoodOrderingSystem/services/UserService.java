@@ -1,7 +1,7 @@
 package com.davidasare.FoodOrderingSystem.services;
 
 import com.davidasare.FoodOrderingSystem.model.User;
-import com.davidasare.FoodOrderingSystem.payload.request.UpdateUserRequest;
+import com.davidasare.FoodOrderingSystem.payload.request.user.UpdateUserRequest;
 import com.davidasare.FoodOrderingSystem.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
