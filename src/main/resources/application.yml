@@ -36,3 +36,6 @@ spring:
           connectiontimeout: 5000
           timeout: 3000
           writetimeout: 5000
+
+BASE_URL: "http://localhost:8080/"
+STRIPE_SECRET_KEY: "sk_test_51KyBFtG8jZExSJhXnkuls7lZ0Cc1Hjc3GZqZT21nUiVh5rP1SREsB9KLww0TsgD3dZOpFg5WJ4uzwWNGcgkJCxkP00nI3SoHyn"

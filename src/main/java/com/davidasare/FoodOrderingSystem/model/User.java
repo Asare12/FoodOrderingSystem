@@ -1,5 +1,6 @@
 package com.davidasare.FoodOrderingSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -38,6 +40,11 @@ public class User {
     private Set<Role> roles = new HashSet<>();
     private Boolean locked = false;
     private Boolean enabled = false;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            fetch = FetchType.LAZY)
+    private List<Order> orders;
 
     public User(String name, String email, String password) {
         this.name = name;

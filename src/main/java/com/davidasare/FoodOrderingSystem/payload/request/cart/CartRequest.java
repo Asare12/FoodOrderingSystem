@@ -10,8 +10,8 @@ public class CartRequest {
     private List<CartItemRequest> cartItems;
     private double totalCost;
 
-    public CartRequest(List<CartItemRequest> cartItemDtoList, double totalCost) {
-        this.cartItems = cartItemDtoList;
+    public CartRequest(List<CartItemRequest> cartItemRequestList, double totalCost) {
+        this.cartItems = cartItemRequestList;
         this.totalCost = totalCost;
     }
 }
